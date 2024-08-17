@@ -100,8 +100,8 @@ function Window:config(window_options)
 end
 
 function Window:is_shaded()
-    local ok, _ = pcall(vim.api.nvim_win_get_var, self.window, 'Sunglasses')
-    return ok
+    local _, result = pcall(vim.api.nvim_win_get_var, self.window, 'Sunglasses')
+    return result
 end
 
 function Window:can_shade()
