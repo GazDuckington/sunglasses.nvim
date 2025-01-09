@@ -133,6 +133,10 @@ function Window:can_shade()
             return "an excluded filetype"
         end
     end
+    local callback = config.get_config().can_shade_callback
+    if callback({window = self.window, buffer = buffer, buftype = buftype, filename = filename }) ~= true then
+        return "callback returned false"
+    end
     return true
 end
 

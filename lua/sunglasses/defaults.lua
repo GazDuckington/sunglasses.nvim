@@ -44,6 +44,10 @@ local defaults = {
         "WinSeparator",
         {"lualine_.*", glob = true},
     },
+    can_shade_callback = function(opts)
+        -- opts: { window_id = number, buffer = number, filetype = string, filename = string }
+        return true
+    end
 }
 
 
