@@ -465,16 +465,26 @@ This is a user-supplied callback function that runs when sunglasses
 determines if it can shade a window. Any return value other than true
 will result in said window not being shaded.
 
-One example use case for this is to exclude diff windows from being shaded
+An example of how to set this is as follows
 
 ```lua
     -- lua
     local sunglasses_options = {
         can_shade_callback = function(opts)
-           if vim.api.nvim_get_option_value('diff', { win = opts.window }) then
-             return false
-           end
-        end
+            local conditions = {
+                function()
+                    return vim.api.nvim_get_option_value("diff", { win = opts.window })
+                end,
+            }
+
+            for _, condition in ipairs(conditions) do
+                if condition() then
+                    return false
+                end
+            end
+
+            return true
+        end,
     }
     require("sunglasses").setup(sunglasses_options)
 ```
