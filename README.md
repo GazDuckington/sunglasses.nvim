@@ -191,9 +191,20 @@ local sunglasses_defaults = {
         {"lualine_.*", glob = true},
     },
     can_shade_callback = function(opts)
-        -- opts: { window_id = number, buffer = number, filetype = string, filename = string }
+        local conditions = {
+            function()
+                return vim.api.nvim_get_option_value("diff", { win = opts.window })
+            end,
+        }
+
+        for _, condition in ipairs(conditions) do
+            if condition() then
+                return false
+            end
+        end
+
         return true
-    end
+    end,
 }
 
 -- The above table will is the default configuration.
@@ -246,9 +257,20 @@ require("sunglasses").setup({
         {"lualine_.*", glob = true},
     },
     can_shade_callback = function(opts)
-        -- opts: { window_id = number, buffer = number, filetype = string, filename = string }
+        local conditions = {
+            function()
+                return vim.api.nvim_get_option_value("diff", { win = opts.window })
+            end,
+        }
+
+        for _, condition in ipairs(conditions) do
+            if condition() then
+                return false
+            end
+        end
+
         return true
-    end
+    end,
 })
 ```
 
@@ -454,40 +476,27 @@ require("sunglasses").setup(sunglasses_options)
 ### Config.can_shade_callback
 Default:  
 ```lua
--- lua
-function(opts)
-    -- opts: { window_id = number, buffer = number, filetype = string, filename = string }
-    return true
-end
+    -- lua
+    can_shade_callback = function(opts)
+        local conditions = {
+            function()
+                return vim.api.nvim_get_option_value("diff", { win = opts.window })
+            end,
+        }
+
+        for _, condition in ipairs(conditions) do
+            if condition() then
+                return false
+            end
+        end
+
+        return true
+    end,
 ```
 
 This is a user-supplied callback function that runs when sunglasses
 determines if it can shade a window. Any return value other than true
 will result in said window not being shaded.
-
-An example of how to set this is as follows
-
-```lua
-    -- lua
-    local sunglasses_options = {
-        can_shade_callback = function(opts)
-            local conditions = {
-                function()
-                    return vim.api.nvim_get_option_value("diff", { win = opts.window })
-                end,
-            }
-
-            for _, condition in ipairs(conditions) do
-                if condition() then
-                    return false
-                end
-            end
-
-            return true
-        end,
-    }
-    require("sunglasses").setup(sunglasses_options)
-```
 
 ## Commands
 
