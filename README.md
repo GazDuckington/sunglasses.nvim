@@ -478,6 +478,7 @@ Default:
 ```lua
     -- lua
     can_shade_callback = function(opts)
+        -- opts: { window_id = number, buffer = number, filetype = string, filename = string }
         local conditions = {
             function()
                 return vim.api.nvim_get_option_value("diff", { win = opts.window })
