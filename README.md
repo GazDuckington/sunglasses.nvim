@@ -189,7 +189,22 @@ local sunglasses_defaults = {
     excluded_highlights = {
         "WinSeparator",
         {"lualine_.*", glob = true},
-    }
+    },
+    can_shade_callback = function(opts)
+        local conditions = {
+            function()
+                return vim.api.nvim_get_option_value("diff", { win = opts.window })
+            end,
+        }
+
+        for _, condition in ipairs(conditions) do
+            if condition() then
+                return false
+            end
+        end
+
+        return true
+    end,
 }
 
 -- The above table will is the default configuration.
@@ -240,7 +255,22 @@ require("sunglasses").setup({
     excluded_highlights = {
         "WinSeparator",
         {"lualine_.*", glob = true},
-    }
+    },
+    can_shade_callback = function(opts)
+        local conditions = {
+            function()
+                return vim.api.nvim_get_option_value("diff", { win = opts.window })
+            end,
+        }
+
+        for _, condition in ipairs(conditions) do
+            if condition() then
+                return false
+            end
+        end
+
+        return true
+    end,
 })
 ```
 
@@ -442,6 +472,32 @@ local sunglasses_options = {
 }
 require("sunglasses").setup(sunglasses_options)
 ```
+
+### Config.can_shade_callback
+Default:  
+```lua
+    -- lua
+    can_shade_callback = function(opts)
+        -- opts: { window_id = number, buffer = number, filetype = string, filename = string }
+        local conditions = {
+            function()
+                return vim.api.nvim_get_option_value("diff", { win = opts.window })
+            end,
+        }
+
+        for _, condition in ipairs(conditions) do
+            if condition() then
+                return false
+            end
+        end
+
+        return true
+    end,
+```
+
+This is a user-supplied callback function that runs when sunglasses
+determines if it can shade a window. Any return value other than true
+will result in said window not being shaded.
 
 ## Commands
 

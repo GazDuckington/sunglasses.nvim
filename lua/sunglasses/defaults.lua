@@ -44,6 +44,21 @@ local defaults = {
         "WinSeparator",
         {"lualine_.*", glob = true},
     },
+    can_shade_callback = function(opts)
+        local conditions = {
+            function()
+                return vim.api.nvim_get_option_value("diff", { win = opts.window })
+            end,
+        }
+
+        for _, condition in ipairs(conditions) do
+            if condition() then
+                return false
+            end
+        end
+
+        return true
+    end,
 }
 
 
