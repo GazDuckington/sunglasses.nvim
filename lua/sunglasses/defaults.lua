@@ -37,7 +37,8 @@ local defaults = {
         "noice",
         "notify",
         "saga_codeaction",
-        "sagarename"
+        "sagarename",
+        "snacks_terminal"
     },
     excluded_highlights = {
         -- Accepts strings as well as lua string glob patterns
